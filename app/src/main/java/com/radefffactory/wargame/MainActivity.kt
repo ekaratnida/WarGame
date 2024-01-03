@@ -6,8 +6,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat.animate
 import kotlin.random.Random
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.NonCancellable.start
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             R.drawable.hearts14,
             R.drawable.hearts15
     )
+
+    var rot = 180F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +89,12 @@ class MainActivity : AppCompatActivity() {
                 //show war label
                 tv_war.visibility = View.VISIBLE
             }
+
+            iv_card1.animate()
+                .rotationY(rot).setDuration(5000L)
+                .start();
+            iv_card2.animate().rotationY(rot).start();
+            rot += 180
         }
     }
 
