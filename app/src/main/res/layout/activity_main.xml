@@ -5,9 +5,14 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     tools:context=".MainActivity">
-
     <LinearLayout
-        android:id="@+id/lay_cards"
+        android:id="@+id/lay_cards_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/lay_cards1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -29,12 +34,39 @@
             android:scaleType="centerInside"
             android:src="@drawable/card_back" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lay_cards2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_card3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/card_back" />
+
+        <ImageView
+            android:id="@+id/iv_card4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/card_back" />
+
+
+    </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/b_deal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lay_cards"
+        android:layout_below="@id/lay_cards_main"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:text="Deal" />

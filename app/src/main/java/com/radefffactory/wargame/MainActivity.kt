@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var iv_card1: ImageView
     lateinit var iv_card2: ImageView
+    lateinit var iv_card3: ImageView
+    lateinit var iv_card4: ImageView
 
     lateinit var tv_player1: TextView
     lateinit var tv_player2: TextView
@@ -55,9 +57,14 @@ class MainActivity : AppCompatActivity() {
         //init objects
         iv_card1 = findViewById(R.id.iv_card1)
         iv_card2 = findViewById(R.id.iv_card2)
+        iv_card3 = findViewById(R.id.iv_card3)
+        iv_card4 = findViewById(R.id.iv_card4)
 
         iv_card1.setImageResource(R.drawable.card_back)
         iv_card2.setImageResource(R.drawable.card_back)
+        iv_card3.setImageResource(R.drawable.card_back)
+        iv_card4.setImageResource(R.drawable.card_back)
+
 
         tv_player1 = findViewById(R.id.tv_player1)
         tv_player2 = findViewById(R.id.tv_player2)
@@ -73,10 +80,15 @@ class MainActivity : AppCompatActivity() {
             //generate cards
             val card1 = random.nextInt(cardsArray.size)
             val card2 = random.nextInt(cardsArray.size)
+            val card3 = random.nextInt(cardsArray.size)
+            val card4 = random.nextInt(cardsArray.size)
 
             //set images
             setCardImage(card1, iv_card1)
             setCardImage(card2, iv_card2)
+            setCardImage(card3, iv_card3)
+            setCardImage(card4, iv_card4)
+
 
             //compare teh cards
             if (card1 > card2) {
@@ -91,9 +103,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             iv_card1.animate()
-                .rotationY(rot).setDuration(5000L)
+                .rotationY(rot)
                 .start();
-            iv_card2.animate().rotationY(rot).start();
+
+            iv_card2.animate()
+                .rotationY(rot)
+                .start();
+
+            iv_card3.animate()
+                .rotationY(rot)
+                .start();
+
+            iv_card4.animate()
+                .rotationY(rot)
+                .start();
+
             rot += 180
         }
     }
