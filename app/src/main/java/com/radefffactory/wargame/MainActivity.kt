@@ -1,10 +1,13 @@
 package com.radefffactory.wargame
 
 import android.os.Bundle
+import android.util.Log
+import android.util.Log.INFO
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat.animate
 import kotlin.random.Random
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             R.drawable.hearts15
     )
 
-    var rot = 180F
+    var rot = 360F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +94,10 @@ class MainActivity : AppCompatActivity() {
 
 
             //compare teh cards
-            if (card1 > card2) {
+            if (card1+card3 > card2+card4) {
                 player1++
                 tv_player1.text = "Player 1: $player1"
-            } else if (card1 < card2) {
+            } else if (card1+card3 < card2+card4) {
                 player2++
                 tv_player2.text = "Player 2: $player2"
             } else {
@@ -118,7 +121,8 @@ class MainActivity : AppCompatActivity() {
                 .rotationY(rot)
                 .start();
 
-            rot += 180
+            rot += 360F
+            //Toast.makeText(this,"rot="+rot,Toast.LENGTH_LONG).show()
         }
     }
 
