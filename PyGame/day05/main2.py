@@ -1,98 +1,97 @@
-# Python program to transform the 
-# image with the mouse 
+"""Rotate, scale and flip an image."""
 
-#Import the libraries pygame and math 
-import pygame 
-import math 
+import pygame
+import math, sys, os
 from pygame.locals import *
 
-# Take colors input 
-RED = (255, 0, 0) 
-BLACK = (0, 0, 0) 
-YELLOW = (255, 255, 0) 
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+GRAY = (150, 150, 150)
 
-#Construct the GUI game 
-pygame.init() 
-
-#Set dimensions of game GUI 
-w, h = 600, 440
-screen = pygame.display.set_mode((w, h)) 
-
-# Set running, angle and scale values 
+pygame.init()
+w, h = 600, 400
+screen = pygame.display.set_mode((w, h))
 running = True
+
+module = sys.modules['__main__']
+path, name = os.path.split(module.__file__)
+path = os.path.join(path, 'img1.png')
+
+img0 = pygame.image.load(path)
+img0.convert()
+
+# draw a green border around img0
+rect0 = img0.get_rect()
+pygame.draw.rect(img0, GREEN, rect0, 1)
+
+center = w//2, h//2
+img = img0
+rect = img.get_rect()
+rect.center = center
+
 angle = 0
 scale = 1
 
-# Take image as input 
-img_logo = pygame.image.load('day5/img1.png') 
-img_logo.convert() 
+mouse = pygame.mouse.get_pos()
 
-# Draw a rectangle around the image 
-rect_logo = img_logo.get_rect() 
-pygame.draw.rect(img_logo, RED, rect_logo, 1) 
+while running:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
 
-# Set the center and mouse position 
-center = w//2, h//2
-mouse = pygame.mouse.get_pos() 
+        if event.type == KEYDOWN:
+            if event.key == K_r:
+                if event.mod & KMOD_SHIFT:
+                    angle -= 10
+                else:
+                    angle += 10
+                img = pygame.transform.rotozoom(img0, angle, scale)
 
-#Store the image in a new variable 
-#Construct the rectangle around image 
-img = img_logo 
-rect = img.get_rect() 
-rect.center = center 
+            elif event.key == K_s:
+                if event.mod & KMOD_SHIFT:
+                    scale /= 1.1
+                else:
+                    scale *= 1.1
+                img = pygame.transform.rotozoom(img0, angle, scale)
 
-# Setting what happens when game is 
-# in running state 
-while running: 
-	for event in pygame.event.get(): 
+            elif event.key == K_o:
+                img = img0
+                angle = 0
+                scale = 1
 
-		# Close if the user quits the game 
-		if event.type == QUIT: 
-			running = False
+            elif event.key == K_h:
+                img = pygame.transform.flip(img, True, False)
+            
+            elif event.key == K_v:
+                img = pygame.transform.flip(img, False, True)
 
-		# Set at which angle the image will 
-		# move left or right 
-		if event.type == KEYDOWN: 
-			if event.key == K_ra: 
-				if event.mod & KMOD_SHIFT: 
-					angle -= 5
-				else: 
-					angle += 5
+            elif event.key == K_l:
+                img = pygame.transform.laplacian(img)
 
-			# Set at what ratio the image will 
-			# decrease or increase 
-			elif event.key == K_sa: 
-				if event.mod & KMOD_SHIFT: 
-					scale /= 1.5
-				else: 
-					scale *= 1.5
-				
-		# Move the image with the specified coordinates, 
-		# angle and scale		 
-		elif event.type == MOUSEMOTION: 
-			mouse = event.pos 
-			x = mouse[0] - center[0] 
-			y = mouse[1] - center[1] 
-			d = math.sqrt(x ** 2 + y ** 2) 
-			angle = math.degrees(-math.atan2(y, x)) 
-			scale = abs(5 * d / w) 
-			img = pygame.transform.rotozoom(img_logo, angle, scale) 
-			rect = img.get_rect() 
-			rect.center = center 
-	
-	# Set screen color and image on screen 
-	screen.fill(YELLOW) 
-	screen.blit(img, rect) 
+            elif event.key == K_2:
+                img = pygame.transform.scale2x(img)
 
-	# Draw the rectangle, line and circle through 
-	# which image can be transformed 
-	pygame.draw.rect(screen, BLACK, rect, 3) 
-	pygame.draw.line(screen, RED, center, mouse, 2) 
-	pygame.draw.circle(screen, RED, center, 6, 1) 
-	pygame.draw.circle(screen, BLACK, mouse, 6, 2) 
-	
-	# Update the GUI game 
-	pygame.display.update() 
+            rect = img.get_rect()
+            rect.center = center
 
-# Quit the GUI game 
+        elif event.type == MOUSEMOTION:
+            mouse = event.pos
+            x = mouse[0] - center[0]
+            y = mouse[1] - center[1]
+            d = math.sqrt(x ** 2 + y ** 2)
+
+            angle = math.degrees(-math.atan2(y, x))
+            scale = abs(5 * d / w)
+            img = pygame.transform.rotozoom(img0, angle, scale)
+            rect = img.get_rect()
+            rect.center = center
+    
+    screen.fill(GRAY)
+    screen.blit(img, rect)
+    pygame.draw.rect(screen, RED, rect, 1)
+    pygame.draw.line(screen, GREEN, center, mouse, 1)
+    pygame.draw.circle(screen, RED, center, 6, 1)
+    pygame.draw.circle(screen, RED, mouse, 6, 1)
+    pygame.display.update()
+
 pygame.quit()
