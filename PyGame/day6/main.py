@@ -62,6 +62,12 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1: #Left click
+                    mouse_x, mouse_y = event.pos
+                    #print("x pos = ",mouse_x,"y pos = ",mouse_y)
+                    print(f"x pos = {mouse_x} y pos = {mouse_y}")
+
 
         player.update(dt)
 
