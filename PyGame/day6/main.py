@@ -12,7 +12,7 @@ WHITE = (255,255,255)
 
 class Player:
     def __init__(self,x,y):
-        self.sprite_sheet = pygame.image.load("spritesheet.png").convert_alpha()
+        self.sprite_sheet = pygame.image.load("day06/spritesheet.png").convert_alpha()
         self.frames = []
         self.frame_width = 32
         self.frame_height = 32
@@ -66,4 +66,6 @@ def main():
     
     pygame.quit()
     sys.exit()
-    
+
+if __name__ == "__main__":
+    main()
