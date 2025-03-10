@@ -92,6 +92,20 @@ class Player:
         if self.game_over:
             game_over_text = font.render("GAME OVER", True, (255, 0, 0))
             surface.blit(game_over_text, (SCREEN_WIDTH // 2 - 60, SCREEN_HEIGHT // 2))
+            
+            # Draw buttons
+            replay_button = pygame.Rect(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2 + 50, 100, 40)
+            exit_button = pygame.Rect(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2 + 100, 100, 40)
+            pygame.draw.rect(surface, (0, 255, 0), replay_button)
+            pygame.draw.rect(surface, (255, 0, 0), exit_button)
+            
+            replay_text = font.render("Replay", True, (0, 0, 0))
+            exit_text = font.render("Exit", True, (0, 0, 0))
+            surface.blit(replay_text, (SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 + 60))
+            surface.blit(exit_text, (SCREEN_WIDTH // 2 - 20, SCREEN_HEIGHT // 2 + 110))
+
+            return replay_button, exit_button
+        return None, None
 
 class Ball:
     def __init__(self, x, y):
@@ -110,48 +124,54 @@ class Ball:
         return player.rect.colliderect(pygame.Rect(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2))
 
 def main():
-    clock = pygame.time.Clock()
-    player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 150)
-    balls = [Ball(random.randint(0, SCREEN_WIDTH), random.randint(-100, -20)) for _ in range(30)]
-    
-    running = True
-    while running:
-        dt = clock.tick(30) / 1000
+    while True:
+        clock = pygame.time.Clock()
+        player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 150)
+        balls = [Ball(random.randint(0, SCREEN_WIDTH), random.randint(-100, -20)) for _ in range(10)]
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not player.game_over:
-                player.target_x = event.pos[0]  # Update target position
-        
-        if not player.game_over:
-            player.update(dt)
-            balls_to_remove = []
-            for ball in balls:
-                ball.update()
-                if ball.check_collision(player):
-                    print("Hit")
-                    player.lives -= 1  # Reduce life when hit
-                    balls_to_remove.append(ball)  # Mark ball for removal
-                    if player.lives <= 0:
-                        print("Game Over")
-                        player.game_over = True
-        
-            # Remove collided balls
-            for ball in balls_to_remove:
-                balls.remove(ball)
-        
-        screen.fill(WHITE)
-        player.draw(screen)
-        if not player.game_over:
-            for ball in balls:
-                ball.draw(screen)
-        pygame.display.flip()
-    
-    pygame.quit()
-    sys.exit()
+        running = True
+        while running:
+            dt = clock.tick(30) / 1000
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if player.game_over:
+                        if replay_button.collidepoint(event.pos):
+                            return main()
+                        elif exit_button.collidepoint(event.pos):
+                            pygame.quit()
+                            sys.exit()
+                    else:
+                        player.target_x = event.pos[0]
+            
+            if not player.game_over:
+                player.update(dt)
+                balls_to_remove = []
+                for ball in balls:
+                    ball.update()
+                    if ball.check_collision(player):
+                        print("Hit")
+                        player.lives -= 1  # Reduce life when hit
+                        balls_to_remove.append(ball)  # Mark ball for removal
+                        if player.lives <= 0:
+                            print("Game Over")
+                            player.game_over = True
+                
+                for ball in balls_to_remove:
+                    balls.remove(ball)
+            
+            screen.fill(WHITE)
+            replay_button, exit_button = player.draw(screen)
+            if not player.game_over:
+                for ball in balls:
+                    ball.draw(screen)
+            pygame.display.flip()
 
 if __name__ == "__main__":
     main()
