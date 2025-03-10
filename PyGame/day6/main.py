@@ -12,10 +12,11 @@ WHITE = (255,255,255)
 
 class Player:
     def __init__(self,x,y):
-        self.sprite_sheet = pygame.image.load("day06/spritesheet.png").convert_alpha()
+        self.sprite_sheet = pygame.image.load("day06/caveman.png").convert_alpha()
+        self.sprite_sheet = pygame.transform.scale(self.sprite_sheet,(512,128))
         self.frames = []
-        self.frame_width = 32
-        self.frame_height = 32
+        self.frame_width = 128
+        self.frame_height = 128
         self.total_frames = 4
 
         for i in range(self.total_frames):
@@ -32,7 +33,11 @@ class Player:
 
     def get_frame(self, frame_number):
         frame = pygame.Surface((self.frame_width, self.frame_height),pygame.SRCALPHA)
-        frame.blit(self.sprite_sheet,(0,0),(frame_number*self.frame_width,0,self.frame_width,self.frame_height))
+        frame.blit(
+            self.sprite_sheet,
+            (0,0),
+            (frame_number*self.frame_width,0,self.frame_width,self.frame_height)
+        )
         return frame
 
     def update(self, dt):
@@ -50,7 +55,7 @@ def main():
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
     running = True
     while running:
-        dt = clock.tick(60)/1000 #แปลง millisecs to sec
+        dt = clock.tick(30)/1000 #แปลง millisecs to sec
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
