@@ -24,9 +24,11 @@ class Player:
         self.frame_height = 128
         self.total_frames = 4
         self.lives = 5  # Player starts with 5 lives
-        self.speed = 5  # Player movement speed
+        self.speedX = 5  # Player movement speed
+        self.speedY = 10
         self.flipped = False  # Track player direction
         self.game_over = False  # Track game over state
+        self.isJump = False
 
         for i in range(self.total_frames):
             frame = self.get_frame(i)
@@ -62,19 +64,25 @@ class Player:
             self.image = self.frames[self.current_frame]
         
         # Smooth movement towards target_x without shaking
-        if abs(self.rect.x - self.target_x) > self.speed:
+        if abs(self.rect.x - self.target_x) > self.speedX:
             if self.rect.x < self.target_x:
-                self.rect.x += self.speed  # Move right
+                self.rect.x += self.speedX  # Move right
                 if not self.flipped:
                     self.set_frames(flipped=True)
                     self.flipped = True
             elif self.rect.x > self.target_x:
-                self.rect.x -= self.speed  # Move left
+                self.rect.x -= self.speedX  # Move left
                 if self.flipped:
                     self.set_frames(flipped=False)
                     self.flipped = False
         else:
             self.rect.x = self.target_x  # Snap exactly to target position to avoid shaking
+
+        if self.isJump:
+            self.rect.y -= self.speedY
+            self.speedY -= 7*dt
+        if self.rect.y >= 450:
+            self.rect.y = 450
 
     def set_frames(self, flipped):
         if flipped:
@@ -114,10 +122,10 @@ class Enemy1:
         self.y = y
         self.width = width
         self.height = height
-        self.speed = random.randint(2, 5)  # Random speed for variation
+        self.speedX = random.randint(2, 5)  # Random speed for variation
 
     def update(self):
-        self.x += self.speed
+        self.x += self.speedX
 
     def draw(self, surface):
         pygame.draw.rect(surface, BLACK, (self.x,self.y,self.width,self.height))
@@ -129,11 +137,11 @@ class Ball:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.speed = random.randint(2, 5)  # Random speed for variation
+        self.speedX = random.randint(2, 5)  # Random speed for variation
         self.radius = random.randint(10,30) #BALL_RADIUS
 
     def update(self):
-        self.y += self.speed
+        self.y += self.speedX
 
     def draw(self, surface):
         pygame.draw.circle(surface, RED, (self.x, self.y), self.radius)
@@ -164,6 +172,9 @@ def main():
                         elif exit_button.collidepoint(event.pos):
                             pygame.quit()
                             sys.exit()
+                    else:
+                        player.isJump = True
+                        player.speedY = 10
                 elif event.type == pygame.MOUSEMOTION:
                     player.target_x = event.pos[0]
             
