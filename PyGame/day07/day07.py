@@ -12,11 +12,12 @@ pygame.display.set_caption("Sprite Sheet Anim with Falling Balls")
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+BLACK = (0,0,0)
 BALL_RADIUS = 20
 
 class Player:
     def __init__(self, x, y):
-        self.sprite_sheet = pygame.image.load("day06/caveman.png").convert_alpha()
+        self.sprite_sheet = pygame.image.load("day7/caveman.png").convert_alpha()
         self.sprite_sheet = pygame.transform.scale(self.sprite_sheet, (512, 128))
         self.frames = []
         self.frame_width = 128
@@ -107,12 +108,29 @@ class Player:
             return replay_button, exit_button
         return None, None
 
+class Enemy1:
+    def __init__(self, x, y,width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.speed = random.randint(2, 5)  # Random speed for variation
+
+    def update(self):
+        self.x += self.speed
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, BLACK, (self.x,self.y,self.width,self.height))
+
+    def check_collision(self, player):
+        return player.rect.colliderect(pygame.Rect(self.x, self.y, self.width, self.height))
+
 class Ball:
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.speed = random.randint(2, 5)  # Random speed for variation
-        self.radius = BALL_RADIUS
+        self.radius = random.randint(10,30) #BALL_RADIUS
 
     def update(self):
         self.y += self.speed
@@ -128,11 +146,10 @@ def main():
         clock = pygame.time.Clock()
         player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 150)
         balls = [Ball(random.randint(0, SCREEN_WIDTH), random.randint(-100, -20)) for _ in range(10)]
-        
+        enemy1s = [Enemy1(random.randint(-30, -20),random.randint(SCREEN_HEIGHT-150,SCREEN_HEIGHT),40,40) for _ in range(10)]
         running = True
         while running:
-            dt = clock.tick(30) / 1000
-            
+            dt = clock.tick(30) / 1000            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -147,12 +164,15 @@ def main():
                         elif exit_button.collidepoint(event.pos):
                             pygame.quit()
                             sys.exit()
-                    else:
-                        player.target_x = event.pos[0]
+                elif event.type == pygame.MOUSEMOTION:
+                    player.target_x = event.pos[0]
             
             if not player.game_over:
                 player.update(dt)
                 balls_to_remove = []
+                for enemy in enemy1s:
+                    enemy.update()
+
                 for ball in balls:
                     ball.update()
                     if ball.check_collision(player):
@@ -171,6 +191,9 @@ def main():
             if not player.game_over:
                 for ball in balls:
                     ball.draw(screen)
+                for enemy in enemy1s:
+                    enemy.draw(screen)
+
             pygame.display.flip()
 
 if __name__ == "__main__":
