@@ -25,7 +25,7 @@ class Player:
         self.total_frames = 4
         self.lives = 5  # Player starts with 5 lives
         self.speedX = 5  # Player movement speed
-        self.speedY = 10
+        self.speedY = 8
         self.flipped = False  # Track player direction
         self.game_over = False  # Track game over state
         self.isJump = False
@@ -80,8 +80,9 @@ class Player:
 
         if self.isJump:
             self.rect.y -= self.speedY
-            self.speedY -= 7*dt
+            self.speedY -= 8*dt
         if self.rect.y >= 450:
+            self.isJump = False
             self.rect.y = 450
 
     def set_frames(self, flipped):
@@ -173,8 +174,9 @@ def main():
                             pygame.quit()
                             sys.exit()
                     else:
-                        player.isJump = True
-                        player.speedY = 10
+                        if player.isJump == False:
+                            player.isJump = True
+                            player.speedY = 8
                 elif event.type == pygame.MOUSEMOTION:
                     player.target_x = event.pos[0]
             
