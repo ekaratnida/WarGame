@@ -1,0 +1,60 @@
+ctrl+shift+p 
+Python: Select Interpret
+Python 3.13.2
+Run > Run without Debug
+
+
+
+
+import subprocess
+import sys
+
+subprocess.check_call([sys.executable, '-m', 'pip', 
+'install', 'pygame_gui', '-U'])
+
+
+
+
+
+
+
+Exercise
+เพิ่ม pygame.time.delay(1000)
+ให้ background เปลี่ยนสีไปเรื่อยๆ ทุกๆ 1 วินาที
+
+สร้างนาฬิกา
+1. สร้างวงกลม
+2. สร้างเข็มนาฬิกา (เข็มวินาที) ขยับทุกๆ 6 องศา
+
+day2
+
+from pygame.locals import *
+elif event.type == MOUSEBUTTONDOWN:
+     position = event.pos
+     print(position)
+
+Question คลิ๊กที่ไหน ให้วาดรูป shape หรืออะไรก็ได้ที่นั่น
+
+random size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pygame
+python
+python -m pip install pygame
+pip install pygame
+Install Gemini Code Assist
+create D:\Pygame\day1
