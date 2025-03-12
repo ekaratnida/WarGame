@@ -31,6 +31,11 @@ drop_down_menu = pygame_gui.elements.UIDropDownMenu(
     manager=manager
 )
 
+text_box = pygame_gui.elements.UITextBox(
+     html_text="This is an <effect id=test>EARTHQUAKE</effect>",
+     relative_rect=pygame.Rect(100, 100, 200, 50),
+     manager=manager)
+
 clock = pygame.time.Clock()
 is_running = True
 
@@ -60,6 +65,7 @@ while is_running:
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             if event.ui_element == drop_down_menu:
                 print("drop down select = ",event.text)
+                text_box.set_active_effect(pygame_gui.TEXT_EFFECT_BOUNCE, effect_tag='test')
 
         manager.process_events(event)
 
