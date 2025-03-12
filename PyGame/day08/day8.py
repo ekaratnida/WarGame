@@ -43,6 +43,19 @@ while is_running:
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == hello_button:
                 print("Hello World!",time_delta)
+                message_window = pygame_gui.elements.UIWindow(
+                    (20,20,200,100),
+                    manager=manager,
+                    window_display_title="Message alert"
+                )
+                # Add a UILabel inside the window
+                label = pygame_gui.elements.UILabel(
+                    relative_rect=pygame.Rect(0, 0, 200, 30),
+                    text=f"Hello World! = {time_delta}",
+                    manager=manager,
+                    container=message_window  # This ensures the label is inside the window
+                )
+              
 
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             if event.ui_element == drop_down_menu:
