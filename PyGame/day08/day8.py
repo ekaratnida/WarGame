@@ -15,7 +15,7 @@ window_surface = pygame.display.set_mode((800, 600))
 background = pygame.Surface((800, 600))
 background.fill(pygame.Color('#000000'))
 
-manager = pygame_gui.UIManager((800,600))
+manager = pygame_gui.UIManager((800,600), theme_path="day8/quick_start.json")
 
 hello_button = pygame_gui.elements.UIButton(
     relative_rect=pygame.Rect((350,275), #กำหนดตำแหน่งของ button
@@ -23,6 +23,14 @@ hello_button = pygame_gui.elements.UIButton(
     text='Say Hello',
     manager=manager
 )
+
+drop_down_menu = pygame_gui.elements.UIDropDownMenu(
+    options_list=["Easy","Medium","Hard"],
+    starting_option="Easy",
+    relative_rect=pygame.Rect((10,275),(200,40)),
+    manager=manager
+)
+
 clock = pygame.time.Clock()
 is_running = True
 
@@ -35,6 +43,11 @@ while is_running:
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == hello_button:
                 print("Hello World!",time_delta)
+
+        if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+            if event.ui_element == drop_down_menu:
+                print("drop down select = ",event.text)
+
         manager.process_events(event)
 
     manager.update(time_delta)
