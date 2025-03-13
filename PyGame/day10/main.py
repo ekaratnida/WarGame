@@ -9,11 +9,11 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Sprite Sheet Anim with Falling Balls")
+pygame.display.set_caption("Adventure of CaveMan")
 
 manager = pygame_gui.UIManager((800,600))
 start_button = pygame_gui.elements.UIButton(
-    relative_rect=pygame.Rect((400,300), #กำหนดตำแหน่งของ button
+    relative_rect=pygame.Rect((300,250), #กำหนดตำแหน่งของ button
     (200,80)), #กำหนดขนาดของ button 
     text='Start',
     manager=manager
@@ -157,16 +157,17 @@ def main():
     while running:
         dt = clock.tick(60) / 1000            
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if player.isJump == False:
                     player.isJump = True
                     player.speedY = 8
             elif event.type == pygame.MOUSEMOTION:
                 player.target_x = event.pos[0]
+            
             elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == start_button:
                     print("Start Game")
@@ -181,16 +182,24 @@ def main():
                     enemy1s = [Enemy1(random.randint(-30, -20),random.randint(SCREEN_HEIGHT-150,SCREEN_HEIGHT),40,40) for _ in range(10)]
   
             manager.process_events(event)
-        
+
         if player.isPlaying:
+
+            screen.fill(WHITE)
+
             if not player.game_over:
+            
                 player.update(dt)
+
                 balls_to_remove = []
+
                 for enemy in enemy1s:
                     enemy.update()
 
                 for ball in balls:
+
                     ball.update()
+                    
                     if ball.check_collision(player):   
                         if player.lives > 0:
                             print("Hit")
@@ -205,8 +214,6 @@ def main():
                 if len(balls) > 0:
                     for ball in balls_to_remove:
                         balls.remove(ball)
-            
-                screen.fill(WHITE)
 
                 player.draw(screen)
 
@@ -215,6 +222,9 @@ def main():
                         ball.draw(screen)
                     for enemy in enemy1s:
                         enemy.draw(screen)
+
+        else:
+            screen.fill(RED)
         
         manager.update(dt)
 
