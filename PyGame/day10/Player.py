@@ -23,7 +23,7 @@ class Player:
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.animation_speed = 0.1
+        self.animation_speed = 0.09
         self.animation_timer = 0
         self.target_x = x  # New attribute to track target position
 

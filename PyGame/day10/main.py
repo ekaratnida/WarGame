@@ -17,7 +17,7 @@ def main():
     clock = pygame.time.Clock()
     player = Player(GameUI.SCREEN_WIDTH // 2, GameUI.SCREEN_HEIGHT - 150)
     balls = [Ball(random.randint(0, GameUI.SCREEN_WIDTH), random.randint(-100, -20)) for _ in range(20)]
-    enemy1s = [Enemy1(random.randint(-30, -20),random.randint(GameUI.SCREEN_HEIGHT-150,GameUI.SCREEN_HEIGHT),40,40) for _ in range(5)]
+    enemy1s = [Enemy1(random.randint(-30, -20),random.randint(GameUI.SCREEN_HEIGHT-150,GameUI.SCREEN_HEIGHT-30),30,30) for _ in range(10)]
     running = True
 
     while running:
@@ -31,7 +31,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if player.isJump == False:
                     player.isJump = True
-                    player.speedY = 8
+                    player.speedY = 5
             elif event.type == pygame.MOUSEMOTION:
                 player.target_x = event.pos[0]         
             elif event.type == pygame_gui.UI_BUTTON_START_PRESS:
@@ -66,7 +66,7 @@ def main():
                     enemy.update()
                     if enemy.check_collision(player):   
                         #if player.lives > 0:
-                        print("Enemy ",enemy.__hash__)
+                        #print("Enemy ",enemy.__hash__)
                         player.lives -= 1  # Reduce life when hit
                         enemies_to_remove.append(enemy)  # Mark ball for removal
                         if player.lives <= 0:
@@ -84,7 +84,7 @@ def main():
                     ball.update()
                     if ball.check_collision(player):   
                         #if player.lives > 0:
-                        print("Hit",ball.__hash__)
+                        #print("Hit",ball.__hash__)
                         player.lives += 1  # Reduce life when hit
                         balls_to_remove.append(ball)  # Mark ball for removal
                         if player.lives <= 0:
@@ -98,9 +98,8 @@ def main():
                     if ball in balls:
                         balls.remove(ball)
 
-                player.draw(GameUI.screen)
-
                 if not GameLogic.game_over:
+                    player.draw(GameUI.screen)
                     for ball in balls:
                         ball.draw(GameUI.screen)
                     for enemy in enemy1s:
