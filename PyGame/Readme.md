@@ -2,3 +2,5 @@
 
 https://pub.towardsai.net/build-and-train-gpt-from-scratch-8ae985a8fc25
 
+https://github.com/dessertlab/cti-to-mitre-with-nlp
+
