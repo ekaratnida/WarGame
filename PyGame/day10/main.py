@@ -34,7 +34,7 @@ def main():
                     player.speedY = 8
             elif event.type == pygame.MOUSEMOTION:
                 player.target_x = event.pos[0]         
-            elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+            elif event.type == pygame_gui.UI_BUTTON_START_PRESS:
                 if event.ui_element == GameUI.start_button:
                     print("Start Game")
                     GameLogic.isPlaying = True
@@ -53,33 +53,49 @@ def main():
 
             GameUI.screen.fill(GameUI.WHITE)
 
+            GameUI.draw(surface=GameUI.screen,lives=player.lives)
+
             if not GameLogic.game_over:
             
                 player.update(dt)
 
                 balls_to_remove = []
+                enemies_to_remove = []
 
                 for enemy in enemy1s:
                     enemy.update()
+                    if enemy.check_collision(player):   
+                        #if player.lives > 0:
+                        print("Enemy ",enemy.__hash__)
+                        player.lives -= 1  # Reduce life when hit
+                        enemies_to_remove.append(enemy)  # Mark ball for removal
+                        if player.lives <= 0:
+                            print("Game Over")
+                            GameLogic.game_over = True
+                            GameLogic.isPlaying= False
+                            enemy1s = []
+
+                
+                for e in enemies_to_remove: #remove the hit one from the game
+                    if e in enemy1s:
+                        enemy1s.remove(e)
 
                 for ball in balls:
-
                     ball.update()
-                    
                     if ball.check_collision(player):   
-                        if player.lives > 0:
-                            print("Hit")
-                            player.lives -= 1  # Reduce life when hit
-                            GameUI.draw(surface=GameUI.screen,lives=player.lives)
-                            balls_to_remove.append(ball)  # Mark ball for removal
-                            if player.lives <= 0:
-                                print("Game Over")
-                                GameLogic.game_over = True
-                                GameLogic.isPlaying= False
-                                balls = []
+                        #if player.lives > 0:
+                        print("Hit",ball.__hash__)
+                        player.lives += 1  # Reduce life when hit
+                        balls_to_remove.append(ball)  # Mark ball for removal
+                        if player.lives <= 0:
+                            print("Game Over")
+                            GameLogic.game_over = True
+                            GameLogic.isPlaying= False
+                            balls = []
+            
                 
-                if len(balls) > 0:
-                    for ball in balls_to_remove:
+                for ball in balls_to_remove: #remove the hit one from the game
+                    if ball in balls:
                         balls.remove(ball)
 
                 player.draw(GameUI.screen)
